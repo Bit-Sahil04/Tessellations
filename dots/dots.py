@@ -1,8 +1,8 @@
 from PIL import Image, ImageDraw
 import time
 
-CHUNK_SIZE = 64
-FILL = False
+CHUNK_SIZE = 16
+FILL = True
 PALETTE = [(255, 255, 255), (42, 44, 5)]
 INVERTED = False
 
@@ -21,7 +21,6 @@ def get_avg_color(img_data2d, area):
     G = int(G / ((x_max - x_min) * (y_max - y_min)))
     B = int(B / ((x_max - x_min) * (y_max - y_min)))
     avg = (R + G + B) // 3
-    print(R - G, R - B)
     return (R, G, B) if FILL else avg
 
 
@@ -99,7 +98,7 @@ def dotify(img):
 def main():
     img = Image.open("Aditya.jpeg")
     dt = time.time()
-    chunkified_img = get_chunkified_img(img).show()
+    chunkified_img = get_chunkified_img(img)
     dots = dotify(chunkified_img)
     print(time.time() - dt)
     dots.show()

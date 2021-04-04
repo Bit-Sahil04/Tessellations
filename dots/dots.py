@@ -1,10 +1,10 @@
 from PIL import Image, ImageDraw
 import time
 
-IMAGE = "aditya.jpeg"
-CHUNK_SIZE = 16         # maximum size of dots
+IMAGE = "flower.jpg"
+CHUNK_SIZE = 20         # maximum size of dots
 FILL = True            # use color or grayscale image
-PALETTE = (60, 200, 128)     # background color
+PALETTE = (0, 0, 0)     # background color
 INVERTED = False        # size of dots inversely proportional to its brightness
 
 
@@ -118,7 +118,7 @@ def main():
     dots = dotify(chunkified_img)
     print(time.time() - dt)
     dots.show()
-    dots.save(f"{CHUNK_SIZE}_{IMAGE[0:IMAGE.index('.')]}")
+    dots.save(f"{CHUNK_SIZE}_{IMAGE}", format="JPEG")
 
 
 main()

@@ -2,10 +2,12 @@ from PIL import Image, ImageDraw
 import time
 
 IMAGE = "flower.jpg"
-CHUNK_SIZE = 20         # maximum size of dots
-FILL = True            # use color or grayscale image
-PALETTE = (0, 0, 0)     # background color
-INVERTED = False        # size of dots inversely proportional to its brightness
+CHUNK_SIZE = 13                 # maximum size of dots
+FILL = True                     # use color or grayscale image
+PALETTE = (0, 0, 0)             # background color
+INVERTED = False                # size of dots inversely proportional to its brightness
+MAXIMUM_RADIAL_FACTOR = 2.2     # additional control over dot sizes, lower value = bigger max sized dots
+MINIMUM_RADIAL_FACTOR = 8.0     # additional control over dot sizes, lower value = bigger minimum sized dots
 
 
 def get_avg_color(img_data2d, area):
@@ -22,8 +24,8 @@ def get_avg_color(img_data2d, area):
     R = int(R / (w * h))
     G = int(G / (w * h))
     B = int(B / (w * h))
-    # avg = int(R + G + B) // 3
-    avg = int(0.3 * R + 0.59 * G + 0.11 * B)
+    avg = int(R + G + B) // 3
+    #avg = int(0.3 * R + 0.59 * G + 0.11 * B)
     return (R, G, B) if FILL else (avg, avg, avg)
 
 
@@ -74,7 +76,7 @@ def get_chunkified_img(img):
 def draw_circle(img_draw: ImageDraw, area, brightness):
     x_min, y_min, x_max, y_max = area
     br = brightness[0] * 0.3 + brightness[1] * 0.59 + brightness[2] * .11
-    radius = custom_map(br, 0, 255, CHUNK_SIZE // 8, CHUNK_SIZE // 2.01)
+    radius = custom_map(br, 0, 255, CHUNK_SIZE // MINIMUM_RADIAL_FACTOR, CHUNK_SIZE // MAXIMUM_RADIAL_FACTOR)
 
     if INVERTED:
         radius = CHUNK_SIZE // 2 - radius
@@ -118,7 +120,7 @@ def main():
     dots = dotify(chunkified_img)
     print(time.time() - dt)
     dots.show()
-    dots.save(f"{CHUNK_SIZE}_{IMAGE}", format="JPEG")
+    dots.save(f"{CHUNK_SIZE}_{MAXIMUM_RADIAL_FACTOR}_{MINIMUM_RADIAL_FACTOR}_{IMAGE}", format="JPEG")
 
 
 main()
